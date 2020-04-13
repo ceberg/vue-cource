@@ -1,128 +1,129 @@
 <template>
-  <div class="layout-wrapper">
-    <Layout class="layout-outer">
-      <Sider :width="200" collapsible hide-trigger reverse-arrow v-model="collapsed" class="sider-outer">
-        <side-menu :collapsed="collapsed" :list="routers"></side-menu>
-      </Sider>
-      <Layout>
-        <Header class="header-wrapper">
-          <Icon :class="triggerClasses" @click.native="handleCollapsed" type="md-menu" :size="32"/>
-        </Header>
-        <Content class="content-con">
-          <div>
-            <Tabs type="card" @on-click="handleClickTab" :value="getTabNameByRoute($route)">
-              <TabPane :label="labelRender(item)" :name="getTabNameByRoute(item)" v-for="(item, index) in tabList" :key="`tabNav${index}`"></TabPane>
-            </Tabs>
+  <div class="main-content">
+    <div class="header">
+      <div class="wrapper">
+        <div class="title left"></div>
+        <div class="right">
+          <div class="category content">
+            <ul class="list">
+              <li>首页</li>
+              <li class="active">惠企政策</li>
+              <li>政策项目</li>
+              <li>项目审核</li>
+              <li>公告管理</li>
+            </ul>
           </div>
-          <div class="view-box">
-            <Card shadow class="page-card">
-              <router-view/>
-            </Card>
+          <div class="account">
+            <p>石建军</p>
+            <p class="login-out">退出</p>
           </div>
-        </Content>
-      </Layout>
-    </Layout>
+        </div>
+      </div>
+    </div>
+    <div class="body">
+      <div class="wrapper">
+        <router-view />
+      </div>
+    </div>
+    <div class="footer">
+      Copyright 2017~2018
+      <span style="margin-right:10px"></span> 技术支持：鸿程系统
+      <span style="margin-right:30px"></span> 沪ICP备15050430号
+    </div>
   </div>
 </template>
 
 <script>
-import SideMenu from '_c/side-menu'
-import { mapState, mapMutations, mapActions } from 'vuex'
-import { getTabNameByRoute, getRouteById } from '@/lib/util'
-export default {
-  components: {
-    SideMenu
-  },
-  data () {
-    return {
-      collapsed: false,
-      getTabNameByRoute
-    }
-  },
-  computed: {
-    triggerClasses () {
-      return [
-        'trigger-icon',
-        this.collapsed ? 'rotate' : ''
-      ]
-    },
-    ...mapState({
-      tabList: state => state.tabNav.tabList,
-      routers: state => state.router.routers.filter(item => {
-        return item.path !== '*' && item.name !== 'login'
-      })
-    })
-  },
-  methods: {
-    ...mapActions([
-      'handleRemove'
-    ]),
-    handleCollapsed () {
-      this.collapsed = !this.collapsed
-    },
-    handleClickTab (id) {
-      let route = getRouteById(id)
-      this.$router.push(route)
-    },
-    handleTabRemove (id, event) {
-      event.stopPropagation()
-      this.handleRemove({
-        id,
-        $route: this.$route
-      }).then(nextRoute => {
-        this.$router.push(nextRoute)
-      })
-    },
-    labelRender (item) {
-      return h => {
-        return (
-          <div>
-            <span>{item.meta.title}</span>
-            <icon nativeOn-click={this.handleTabRemove.bind(this, getTabNameByRoute(item))} type="md-close-circle" style="line-height:10px;"></icon>
-          </div>
-        )
+export default {};
+</script>
+
+<style lang="scss" scoped>
+@import "@/assets/css/variable.scss";
+$dark-blue: #184493;
+.main-content {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  .body {
+    flex: 1;
+    padding-bottom: 20px;
+  }
+  .footer {
+    height: 40px;
+    line-height: 40px;
+    font-size: 16px;
+    color: #fff;
+    background-color: $dark-blue;
+    text-align: center;
+  }
+}
+.header {
+  background: linear-gradient(
+    to right,
+    rgba(0, 53, 178, 1) 0%,
+    rgba(73, 0, 158, 1) 52%,
+    rgba(22, 0, 68, 1) 100%
+  );
+  opacity: 0.9;
+  width: 100%;
+  .wrapper {
+    width: 1200px;
+    height: 80px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+  }
+  .content {
+    flex: 1 0 auto;
+    .list li {
+      width: 120px;
+      height: 100%;
+      line-height: 80px;
+      text-align: center;
+      font-size: 16px;
+      &.active {
+        background: #008aff;
       }
     }
   }
 }
-</script>
+.header {
+  color: #fff;
 
-<style lang="less">
-.layout-wrapper, .layout-outer{
-  height: 100%;
-  .header-wrapper{
-    background: #fff;
-    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, .1);
-    padding: 0 23px;
-    .trigger-icon{
-      cursor: pointer;
-      transition: transform .3s ease;
-      &.rotate{
-        transform: rotateZ(-90deg);
-        transition: transform .3s ease;
-      }
+  .left {
+    flex: 0 0 265px;
+    background: url("../assets/img/logo.png");
+    background-repeat: no-repeat;
+    background-position: left center;
+  }
+  .right {
+    justify-content: space-between;
+    display: flex;
+  }
+  .list {
+    display: flex;
+    list-style: none;
+    font-size: 16px;
+  }
+  .account {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.3);
+    font-size: 12px;
+    .login-out {
+      color: $blue;
     }
   }
-  .sider-outer{
-    height: 100%;
-    overflow: hidden;
-    .ivu-layout-sider-children{
-      margin-right: -20px;
-      overflow-y: scroll;
-      overflow-x: hidden;
-    }
-  }
-  .content-con{
-    padding: 0;
-    .ivu-tabs-bar{
-      margin-bottom: 0;
-    }
-    .view-box{
-      padding: 0;
-    }
-  }
-  .page-card{
-    min-height: ~"calc(100vh - 84px)";
+}
+.body {
+  background: #eaeaea;
+  .wrapper {
+    width: 1200px;
+    margin: 0 auto;
   }
 }
 </style>

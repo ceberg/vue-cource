@@ -1,0 +1,10 @@
+// 使用方法
+// @import "@/assets/css/variable.scss";
+
+$blue: #008AFF;
+@mixin bg-blue {
+  background: blue;
+}
+@mixin bg-cc($color) {
+  background: $color;
+}

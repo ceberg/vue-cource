@@ -1,4 +1,4 @@
-import { routes, routerMap } from '@/router/router'
+import { routes } from '@/router/router'
 
 const state = {
   routers: routes,
@@ -6,7 +6,7 @@ const state = {
 }
 
 const mutations = {
-  CONCAT_ROUTES (state, routerList) {
+  CONCAT_ROUTES(state, routerList) {
     state.routers = routerList.concat(routes)
     state.hasGetRules = true
   }
@@ -22,7 +22,7 @@ const getAccesRouterList = (routes, rules) => {
 }
 
 const actions = {
-  concatRoutes ({ commit }, rules) {
+  concatRoutes({ commit }, rules) {
     return new Promise((resolve, reject) => {
       try {
         let routerList = []

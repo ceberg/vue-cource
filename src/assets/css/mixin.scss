@@ -1,0 +1,7 @@
+// 分页父容器
+@mixin page-container {
+  background: #fff;
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+}

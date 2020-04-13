@@ -1,12 +1,13 @@
 import axios from 'axios'
-import { baseURL } from '@/config'
-import { getToken } from '@/lib/util'
+// import { baseURL } from '@/config'
+// import { getToken } from '@/lib/util'
+const baseURL = "";
 class HttpRequest {
-  constructor (baseUrl = baseURL) {
+  constructor(baseUrl = baseURL) {
     this.baseUrl = baseUrl
     this.queue = {}
   }
-  getInsideConfig () {
+  getInsideConfig() {
     const config = {
       baseURL: this.baseUrl,
       headers: {
@@ -15,13 +16,13 @@ class HttpRequest {
     }
     return config
   }
-  distroy (url) {
+  distroy(url) {
     delete this.queue[url]
     if (!Object.keys(this.queue).length) {
       // Spin.hide()
     }
   }
-  interceptors (instance, url) {
+  interceptors(instance, url) {
     instance.interceptors.request.use(config => {
       // 添加全局的loading...
       if (!Object.keys(this.queue).length) {
@@ -42,7 +43,7 @@ class HttpRequest {
       return Promise.reject(error.response.data)
     })
   }
-  request (options) {
+  request(options) {
     const instance = axios.create()
     options = Object.assign(this.getInsideConfig(), options)
     this.interceptors(instance, options.url)
